@@ -1,5 +1,11 @@
 $(document).ready( () => {
   cargarCategorias();
+  var date = new Date();
+  var dia = date.getDate();
+  var mes = date.getMonth();
+  var anyo = date.getFullYear();
+  fecha = dia + "/" + mes + "/" + anyo;
+  carrito = new Carrito(fecha);
 });
 
 function cargarCategorias() {
@@ -9,14 +15,15 @@ function cargarCategorias() {
     success: function (data) {
       $("#categorias").empty();
       data.forEach( i => {
-        $('<a href="#" id="categoria/'+i.id+'" onclick="cargarProductos(this.id)" class="list-group-item productos">'+i.nombre+'</a>').appendTo("#categorias");
+        $('<a href="#" id="categoria|'+i.id+'" class="list-group-item productos">'+i.nombre+'</a>').appendTo("#categorias");
       });
+      $(".productos").on("click", cargarProductos);
     }
   });
 }
 
-function cargarProductos(categoria) {
-  var id = categoria.split("/")[1];
+function cargarProductos() {
+  var id = this.id.split("|")[1];
   $.ajax({
     method: 'POST',
     data: {id: id},
@@ -34,10 +41,58 @@ function cargarProductos(categoria) {
               '</h4>'+
               '<h5>'+i.precio+'€</h5>'+
               '<p class="card-text">'+i.descripcion+'</p>'+
+              '<input class="anadirCarrito" type="submit" name="producto|'+i.id+';'+i.imagen+';'+i.nombre+';'+i.precio+';'+i.descripcion+'" value="Añadir a carrito" />'+
             '</div>'+
           '</div>'+
         '</div>').appendTo("#productos");
       });
+      $(".anadirCarrito").on("click", anadirCarrito);
     }
   });
+}
+
+function Carrito(fecha) {
+  this.fecha = fecha;
+  this.articulos = [];
+}
+
+Carrito.prototype.existe = function(articulo) {
+  var resultado = null;
+  for (var i = 0; i < this.articulos.length; i++) {
+    if (this.articulos[i].id == articulo.id) {
+      resultado = this.articulos[i];
+    }
+  }
+  return resultado;
+}
+
+Carrito.prototype.anyadir = function(articulo) {
+  var existe = this.existe(articulo);
+  if (existe == null) {
+    this.articulos.push(articulo);
+  } else {
+    existe.cantidad++;
+    existe.precioTotal += existe.precio;
+  }
+}
+
+function Articulo(id, imagen, nombre, precio, descripcion) {
+  this.id = id;
+  this.imagen = imagen;
+  this.nombre = nombre;
+  this.precio = parseFloat(precio);
+  this.descripcion = descripcion;
+  this.cantidad = 1;
+  this.precioTotal = this.precio;
+}
+
+function anadirCarrito() {
+  var id = this.name.split(";")[0];
+  var imagen = this.name.split(";")[1];
+  var nombre = this.name.split(";")[2];
+  var precio = this.name.split(";")[3];
+  var descripcion = this.name.split(";")[4];
+  var articulo = new Articulo(id, imagen, nombre, precio, descripcion);
+  carrito.anyadir(articulo);
+  console.log(carrito.articulos);
 }
