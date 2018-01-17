@@ -17,7 +17,7 @@ function cargarCategorias() {
       data.forEach( i => {
         $('<a href="#" id="categoria|'+i.id+'" class="list-group-item productos">'+i.nombre+'</a>').appendTo("#categorias");
       });
-      $(".productos").on("click", cargarProductos);
+      $(".productos").click(cargarProductos);
     }
   });
 }
@@ -46,7 +46,7 @@ function cargarProductos() {
           '</div>'+
         '</div>').appendTo("#productos");
       });
-      $(".anadirCarrito").on("click", anadirCarrito);
+      $(".anadirCarrito").click(anadirCarrito);
     }
   });
 }
