@@ -5,11 +5,7 @@
   $listaBD = mysqli_query($con, $sql);
   $lista = [];
   while ($row = mysqli_fetch_array($listaBD)) {
-    $cat = [
-      'id' => $row['id'],
-      'nombre' => $row['nombre'],
-    ];
-    array_push($lista, $cat);
+    $lista[] = $row;
   }
   echo json_encode($lista);
  ?>
