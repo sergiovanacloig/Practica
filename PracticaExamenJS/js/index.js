@@ -1,11 +1,18 @@
 $(document).ready( () => {
+  localStorage.removeItem("carrito");
   cargarCategorias();
-  var date = new Date();
-  var dia = date.getDate();
-  var mes = date.getMonth();
-  var anyo = date.getFullYear();
-  fecha = dia + "/" + mes + "/" + anyo;
-  carrito = new Carrito(fecha);
+  var carritoGuardado = JSON.parse(localStorage.getItem("carrito"));
+  if (carritoGuardado === null || carritoGuardado.articulos.length === 0) {
+    var date = new Date();
+    var dia = date.getDate();
+    var mes = date.getMonth()+1;
+    var anyo = date.getFullYear();
+    fecha = dia + "/" + mes + "/" + anyo;
+    carrito = new Carrito(fecha);
+  } else {
+    this.carrito = carritoGuardado;
+  }
+  console.log(carrito);
 });
 
 function cargarCategorias() {
@@ -94,5 +101,9 @@ function anadirCarrito() {
   var descripcion = this.name.split(";")[4];
   var articulo = new Articulo(id, imagen, nombre, precio, descripcion);
   carrito.anyadir(articulo);
-  console.log(carrito.articulos);
+  console.log(carrito);
+}
+
+function cargarCarrito() {
+  localStorage.setItem("carrito", JSON.stringify(this.carrito));
 }
