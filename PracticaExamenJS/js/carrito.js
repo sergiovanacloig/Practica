@@ -10,20 +10,20 @@ $(document).ready( () => {
 function anyadir() {
   var id = this.name;
   carrito.articulos[id].cantidad++;
+  actualizar();
   cargarCarrito();
 }
 
 function eliminar() {
   var id = this.name;
   carrito.articulos[id].cantidad--;
-  cargarCarrito();
   actualizar();
+  cargarCarrito();
 }
 
 function actualizar() {
   localStorage.removeItem("carrito");
   localStorage.setItem("carrito", JSON.stringify(carrito));
-  actualizar();
 }
 
 function cargarCarrito() {
