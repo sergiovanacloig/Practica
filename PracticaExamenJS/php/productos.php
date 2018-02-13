@@ -1,7 +1,7 @@
 <?php
   $id = $_POST['id'];
   $bd = "mierder";
-  $con = mysqli_connect("localhost", "root", "root", $bd);
+  $con = mysqli_connect("192.168.1.121", "root", "root", $bd);
   $sql = "SELECT * FROM productos  WHERE id_categoria=$id";
   $listaBD = mysqli_query($con, $sql);
   $lista = [];

@@ -1,6 +1,6 @@
 <?php
   $bd = "mierder";
-  $con = mysqli_connect("localhost", "root", "root", $bd);
+  $con = mysqli_connect("192.168.1.121", "root", "root", $bd);
   $sql = "SELECT * FROM categorias";
   $listaBD = mysqli_query($con, $sql);
   $lista = [];
